@@ -5,10 +5,6 @@
  */
 package control_planilla;
 
-/**
- *
- * @author López
- */
 public class Control_Planilla {
 
     /**
