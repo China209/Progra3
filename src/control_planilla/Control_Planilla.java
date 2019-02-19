@@ -15,7 +15,7 @@ public class Control_Planilla {
         int iDeptos[] = new int[5];//Vector de Departamentos
         String[][] sPlanilla = new String[10][10];//Matriz donde se guardará la planilla
         do {//Ciclo que se genera si la opcion no sea igual a 0
-            iOpcion = Integer.parseInt(JOptionPane.showInputDialog(null, "1.Ingreso de Datos....\n0.Salir", "MENÚ", JOptionPane.PLAIN_MESSAGE));
+            iOpcion = Integer.parseInt(JOptionPane.showInputDialog(null, "1.Ingreso de Datos\n0.Salir", "MENÚ", JOptionPane.PLAIN_MESSAGE));
             menu(iOpcion, sPlanilla, iDeptos);
         } while (iOpcion != 0);
         System.exit(0);//Termina en programa
