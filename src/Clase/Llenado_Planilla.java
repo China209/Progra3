@@ -42,9 +42,9 @@ public class Llenado_Planilla {
                     if (Double.parseDouble(sPlanilla[i][2]) < 4000) {//Si el sueldo base es menor a 4000 el Descuento Judicial 0
                         sPlanilla[i][j] = Double.toString(0);
                     } else {//De lo contrario se realizará el cálculo
-                        dIGSS_Anual = Double.parseDouble(sPlanilla[i][5]) * 12;
-                        sPlanilla[i][j] = Double.toString((Math.round(48000 - dIGSS_Anual) / 12));
-                    }
+                        dIGSS_Anual = Double.parseDouble(sPlanilla[i][5]) * 12;//Cálculo de IGSS anual
+                        sPlanilla[i][j] = Double.toString((Math.round(48000 - dIGSS_Anual) / 12));//Sueldo Anual Base menos IGSS anual divido dentro de 12
+                    }                                                                              //para su cálculo mensual
                 }
                 
             }
@@ -68,7 +68,7 @@ public class Llenado_Planilla {
                     if (iOpIsr == 1) {//Si la opcion de ISR es igual a 1 desarrolla el cálculo
                         if (Double.parseDouble(sPlanilla[i][2]) < 4000) {//Si es menor de 4000 el sueldo base ISR es igual a 0
                             sPlanilla[i][j] = Double.toString(0);
-                        } else {
+                        } else {//Sueldo base-Descuento Judicial *5%
                             sPlanilla[i][j] = Double.toString(Math.round((Double.parseDouble(sPlanilla[i][2]) - Double.parseDouble(sPlanilla[i][6])) * 0.05));
                         }
                     } else {//Si la opción es diferente de 1
