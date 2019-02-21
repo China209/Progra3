@@ -10,6 +10,7 @@ public class Llenado_Planilla {
     private double dIGSS = 0.0483;
     private double dCalculo_IGSS;
     private double dIGSS_Anual;
+    private int iOpIsr;
 
     private void Calculo_Percepciones(String[][] sPlanilla) {
         for (int i = 0; i < sPlanilla.length; i++) {
@@ -45,13 +46,7 @@ public class Llenado_Planilla {
                         sPlanilla[i][j] = Double.toString((Math.round(48000 - dIGSS_Anual) / 12));
                     }
                 }
-                if (j == 7) {//Cálculo de ISR
-                    if (Double.parseDouble(sPlanilla[i][2]) < 4000) {
-                        sPlanilla[i][j] = Double.toString(0);
-                    } else {
-                        sPlanilla[i][j] = Double.toString(Math.round((Double.parseDouble(sPlanilla[i][2]) - Double.parseDouble(sPlanilla[i][6])) * 0.05));
-                    }
-                }
+                
             }
         }
     }
@@ -66,6 +61,20 @@ public class Llenado_Planilla {
                 }
                 if (j == 1) {//Ingreso de Nombre de Empleados
                     sPlanilla[i][j] = JOptionPane.showInputDialog(null, "Empleado # " + (i + 1), "INGRESO NOMBRE DE EMPLEADOS", JOptionPane.PLAIN_MESSAGE);
+                    iOpIsr = Integer.parseInt(JOptionPane.showInputDialog(null, "Desea que a " + sPlanilla[i][j] + " se le calcule IGGS\n1. SI\n0. NO","Cálculo de ISR",JOptionPane.PLAIN_MESSAGE));
+                }
+                if (j == 7) {//Cálculo de ISR
+
+                    if (iOpIsr == 1) {//Si la opcion de ISR es igual a 1 desarrolla el cálculo
+                        if (Double.parseDouble(sPlanilla[i][2]) < 4000) {//Si es menor de 4000 el sueldo base ISR es igual a 0
+                            sPlanilla[i][j] = Double.toString(0);
+                        } else {
+                            sPlanilla[i][j] = Double.toString(Math.round((Double.parseDouble(sPlanilla[i][2]) - Double.parseDouble(sPlanilla[i][6])) * 0.05));
+                        }
+                    } else {//Si la opción es diferente de 1
+                        sPlanilla[i][j] = Double.toString(0);
+                    }
+
                 }
                 if (j == 8) {//Cálculo de sueldo líquido
                     sPlanilla[i][j] = Double.toString(Math.round(Double.parseDouble(sPlanilla[i][2]) + Integer.parseInt(sPlanilla[i][3]) + Integer.parseInt(sPlanilla[i][4]) - Double.parseDouble(sPlanilla[i][5]) - Double.parseDouble(sPlanilla[i][6]) - Double.parseDouble(sPlanilla[i][7])));
