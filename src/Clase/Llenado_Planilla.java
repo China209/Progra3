@@ -39,9 +39,9 @@ public class Llenado_Planilla {
 
                 }
                 if (j == 6) {//Cálculo del Descuento Judicial
-                    if (Double.parseDouble(sPlanilla[i][2]) < 4000) {
+                    if (Double.parseDouble(sPlanilla[i][2]) < 4000) {//Si el sueldo base es menor a 4000 el Descuento Judicial 0
                         sPlanilla[i][j] = Double.toString(0);
-                    } else {
+                    } else {//De lo contrario se realizará el cálculo
                         dIGSS_Anual = Double.parseDouble(sPlanilla[i][5]) * 12;
                         sPlanilla[i][j] = Double.toString((Math.round(48000 - dIGSS_Anual) / 12));
                     }
