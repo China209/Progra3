@@ -7,7 +7,7 @@ public class Llenado_Planilla {
     //Variables Globales
     private int iBonoIncentivo = 250;
     private int iComision;
-    private double dIGSS = 0.0483;
+    private double dIGSS = 0.0483;//DESCUENTO IGSS DE LEY 4.83%
     private double dCalculo_IGSS;
     private double dIGSS_Anual;
     private int iOpIsr;
