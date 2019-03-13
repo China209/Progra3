@@ -1,10 +1,13 @@
 package Ventana;
 
+import Clase.Conexion;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
 public class ManejoUsuario extends javax.swing.JFrame {
 
+    Conexion c=new Conexion();
+    Connection cn=c.SQLConnection();
     public ManejoUsuario() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -129,7 +132,6 @@ public class ManejoUsuario extends javax.swing.JFrame {
             if (txtUserName.getText().length() == 0 || txtPassword.getText().length() == 0) {
                 JOptionPane.showMessageDialog(null, "Usuario y/o Contraseña vacíos", "ADVERTENCIA", JOptionPane.PLAIN_MESSAGE);
             } else {
-                Connection cn = DriverManager.getConnection("jdbc:mysql://localhost/empleados", "root", "");
                 PreparedStatement pst = cn.prepareStatement("insert into usuarios values(?,?,?)");
                 pst.setString(1, "0");
                 pst.setString(2, txtUserName.getText().trim());
@@ -141,7 +143,7 @@ public class ManejoUsuario extends javax.swing.JFrame {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Fallo en Conexión" + e, "ERROR", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Fallo " + e, "ERROR", JOptionPane.PLAIN_MESSAGE);
         }
 
 
@@ -157,7 +159,6 @@ public class ManejoUsuario extends javax.swing.JFrame {
             if (txtBuscar.getText().length() == 0) {
                 JOptionPane.showMessageDialog(null, "Ingrese Código a Buscar", "ADVERTENCIA", JOptionPane.PLAIN_MESSAGE);
             } else {
-                Connection cn = DriverManager.getConnection("jdbc:mysql://localhost/empleados", "root", "");
                 PreparedStatement pst = cn.prepareStatement("select* from usuarios where CodUsuario = ?");
                 pst.setString(1, txtBuscar.getText().trim());
 
@@ -173,7 +174,7 @@ public class ManejoUsuario extends javax.swing.JFrame {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Fallo en Conexión" + e, "ERROR", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Fallo: " + e, "ERROR", JOptionPane.PLAIN_MESSAGE);
             txtBuscar.setText("");
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
@@ -181,7 +182,6 @@ public class ManejoUsuario extends javax.swing.JFrame {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         //Elimina el registro buscado
         try {
-            Connection cn = DriverManager.getConnection("jdbc:mysql://localhost/empleados", "root", "");
             PreparedStatement pst = cn.prepareStatement("delete from usuarios where CodUsuario = ?");
 
             pst.setString(1, txtBuscar.getText().trim());
@@ -193,7 +193,7 @@ public class ManejoUsuario extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Usuario Eliminado", "REGISTRO DATOS", JOptionPane.PLAIN_MESSAGE);
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Fallo en Conexión" + e, "ERROR", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Fallo: " + e, "ERROR", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -209,7 +209,6 @@ public class ManejoUsuario extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "No hay campos modificados", "REGISTRO DATOS", JOptionPane.PLAIN_MESSAGE);
             } else {
                 String cod = txtBuscar.getText().trim();
-                Connection cn = DriverManager.getConnection("jdbc:mysql://localhost/empleados", "root", "");
                 PreparedStatement pst = cn.prepareStatement("update usuarios set NomUsuario = ?, PassUsuario = ? where CodUsuario = " + cod);
 
                 pst.setString(1, txtUserName.getText().trim());
@@ -222,7 +221,7 @@ public class ManejoUsuario extends javax.swing.JFrame {
             }
         } catch (Exception e) {
             System.out.println("Error " + e);
-            JOptionPane.showMessageDialog(null, "Fallo en Conexión" + e, "ERROR", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Fallo: " + e, "ERROR", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_btnModificar1ActionPerformed
 

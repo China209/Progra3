@@ -3,7 +3,6 @@
  */
 package control_planilla;
 
-import javax.swing.JOptionPane;
 import Ventana.*;
 
 public class Control_Planilla {

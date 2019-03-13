@@ -1,10 +1,13 @@
 package Ventana;
 
+import Clase.Conexion;
 import Clase.Llenado_Planilla;
 import java.sql.*;
 import javax.swing.JOptionPane;
 public class Usuarios extends javax.swing.JFrame {
 
+    Conexion c=new Conexion();
+    Connection cn=c.SQLConnection();
     public Usuarios() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -117,7 +120,6 @@ public class Usuarios extends javax.swing.JFrame {
         try {
             String sUsuario=txtUserName.getText().trim();
             String sContra=txtPassword.getText().trim();
-            Connection cn = DriverManager.getConnection("jdbc:mysql://localhost/empleados", "root", "");
             PreparedStatement pst = cn.prepareStatement("select count(CodUsuario) as i from usuarios where NomUsuario='"+sUsuario+"'"+
                     "and PassUsuario='"+sContra+"'");
             ResultSet rs=pst.executeQuery();
@@ -130,7 +132,6 @@ public class Usuarios extends javax.swing.JFrame {
                 }
                         
             }
-                   
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,"Error: "+e,"ERROR",JOptionPane.PLAIN_MESSAGE);
