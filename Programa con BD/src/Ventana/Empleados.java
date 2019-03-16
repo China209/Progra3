@@ -14,25 +14,49 @@ public class Empleados extends javax.swing.JFrame {
 
     public Empleados() {
         initComponents();
-        MostrarDatos();
+        MostrarDatos("");
         this.setLocationRelativeTo(null);
     }
-    void MostrarDatos(){
-        DefaultTableModel modelo=new DefaultTableModel();
+
+    void InhabilitarBotones() {
+        btnModificar.setEnabled(false);
+    }
+
+    void LimpiarTexts() {
+        txtCod.setText("");
+        txtNom.setText("");
+        txtSueldo.setText("");
+        txtPuesto.setText("");
+        txtDepto.setText("");
+        txtStatus.setText("");
+    }
+
+    void MostrarDatos(String sCadena) {
+        DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("Código");
         modelo.addColumn("Nombre");
+        modelo.addColumn("Sueldo");
+        modelo.addColumn("Puesto");
         modelo.addColumn("Depto.");
         modelo.addColumn("Estatus");
         tblEmpleados.setModel(modelo);
-        String[]sDatos=new String[4];
+        String[] sDatos = new String[6];
+        String sSQL = "";
+        if (sCadena.equals("")) {
+            sSQL = "SELECT * FROM empleado";
+        } else {
+            sSQL = "SELECT * FROM empleado WHERE empcodigo='" + sCadena + "'";
+        }
         try {
-            Statement st=cn.createStatement();
-            ResultSet rs=st.executeQuery("select * from empleado ");
-            while(rs.next()){
-                sDatos[0]=rs.getString(1);
-                sDatos[1]=rs.getString(2);
-                sDatos[2]=rs.getString(3);
-                sDatos[3]=rs.getString(4);
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sSQL);
+            while (rs.next()) {
+                sDatos[0] = rs.getString(1);
+                sDatos[1] = rs.getString(2);
+                sDatos[2] = rs.getString(3);
+                sDatos[3] = rs.getString(4);
+                sDatos[4] = rs.getString(5);
+                sDatos[5] = rs.getString(6);
                 modelo.addRow(sDatos);
             }
             tblEmpleados.setModel(modelo);
@@ -45,6 +69,9 @@ public class Empleados extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPnModEliminar = new javax.swing.JPopupMenu();
+        jMiModificar = new javax.swing.JMenuItem();
+        jMiEliminar = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -56,12 +83,32 @@ public class Empleados extends javax.swing.JFrame {
         txtDepto = new javax.swing.JTextField();
         txtStatus = new javax.swing.JTextField();
         btnGrabar = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        txtSueldo = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txtPuesto = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblEmpleados = new javax.swing.JTable();
-        btnEliminar = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
         txtBuscar = new javax.swing.JTextField();
+        btnMostrar = new javax.swing.JButton();
+
+        jMiModificar.setText("Modificar");
+        jMiModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMiModificarActionPerformed(evt);
+            }
+        });
+        jPnModEliminar.add(jMiModificar);
+
+        jMiEliminar.setText("Eliminar");
+        jMiEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMiEliminarActionPerformed(evt);
+            }
+        });
+        jPnModEliminar.add(jMiEliminar);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -69,7 +116,7 @@ public class Empleados extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(204, 204, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3), "Datos Empleados", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Malgun Gothic", 1, 14))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Datos Empleados", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Malgun Gothic", 1, 14))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Malgun Gothic", 0, 12)); // NOI18N
         jLabel1.setText("Código");
@@ -97,33 +144,55 @@ public class Empleados extends javax.swing.JFrame {
         btnGrabar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/savedisk_floppydisk_guardar_1543 (1).png"))); // NOI18N
         btnGrabar.setText("Grabar");
         btnGrabar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnGrabar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGrabar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGrabarActionPerformed(evt);
             }
         });
 
+        jLabel5.setFont(new java.awt.Font("Malgun Gothic", 0, 12)); // NOI18N
+        jLabel5.setText("Sueldo");
+
+        txtSueldo.setFont(new java.awt.Font("Malgun Gothic", 0, 12)); // NOI18N
+
+        jLabel6.setFont(new java.awt.Font("Malgun Gothic", 0, 12)); // NOI18N
+        jLabel6.setText("Puesto");
+
+        txtPuesto.setFont(new java.awt.Font("Malgun Gothic", 0, 12)); // NOI18N
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel2)
-                        .addComponent(jLabel1))
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addGap(45, 45, 45)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtCod, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
-                        .addComponent(txtNom)
-                        .addComponent(txtDepto)
-                        .addComponent(txtStatus))
-                    .addComponent(btnGrabar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(54, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel6))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(45, 45, 45)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtPuesto)
+                                    .addComponent(txtCod, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                                    .addComponent(txtNom)
+                                    .addComponent(txtDepto)
+                                    .addComponent(txtSueldo)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(92, 92, 92)
+                        .addComponent(btnGrabar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,24 +201,32 @@ public class Empleados extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtCod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
+                .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(35, 35, 35)
+                .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtDepto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(42, 42, 42)
+                    .addComponent(jLabel5)
+                    .addComponent(txtSueldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtPuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(txtDepto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnGrabar, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
-                .addGap(6, 6, 6))
+                .addGap(14, 14, 14)
+                .addComponent(btnGrabar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 19, -1, 320));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 19, -1, 370));
 
         tblEmpleados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -159,17 +236,10 @@ public class Empleados extends javax.swing.JFrame {
 
             }
         ));
+        tblEmpleados.setComponentPopupMenu(jPnModEliminar);
         jScrollPane1.setViewportView(tblEmpleados);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(406, 19, 429, 320));
-
-        btnEliminar.setBackground(new java.awt.Color(0, 153, 153));
-        btnEliminar.setFont(new java.awt.Font("Malgun Gothic", 1, 12)); // NOI18N
-        btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Delete-80_icon-icons.com_57340 (1).png"))); // NOI18N
-        btnEliminar.setText("Eliminar");
-        btnEliminar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 350, 100, 40));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 20, 429, 370));
 
         btnModificar.setBackground(new java.awt.Color(0, 153, 153));
         btnModificar.setFont(new java.awt.Font("Malgun Gothic", 1, 12)); // NOI18N
@@ -177,62 +247,156 @@ public class Empleados extends javax.swing.JFrame {
         btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Pencil512_44200.png"))); // NOI18N
         btnModificar.setText("Modificar");
         btnModificar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 350, 120, 40));
+        btnModificar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 410, 120, 40));
 
-        jButton1.setBackground(new java.awt.Color(0, 153, 153));
-        jButton1.setFont(new java.awt.Font("Malgun Gothic", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Buscar");
-        jButton1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 360, 50, 30));
-        jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 370, 119, -1));
+        btnBuscar.setBackground(new java.awt.Color(0, 153, 153));
+        btnBuscar.setFont(new java.awt.Font("Malgun Gothic", 1, 12)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
+        btnBuscar.setText("Buscar");
+        btnBuscar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 420, 50, 30));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 860, 420));
+        txtBuscar.setFont(new java.awt.Font("Malgun Gothic", 0, 12)); // NOI18N
+        jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 430, 119, -1));
+
+        btnMostrar.setBackground(new java.awt.Color(0, 153, 153));
+        btnMostrar.setFont(new java.awt.Font("Malgun Gothic", 1, 12)); // NOI18N
+        btnMostrar.setForeground(new java.awt.Color(255, 255, 255));
+        btnMostrar.setText("Mostrar General");
+        btnMostrar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnMostrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMostrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMostrarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnMostrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 410, 120, 40));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 480));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
-        try {
-            if (txtCod.getText().length() == 0 || txtNom.getText().length() == 0 || txtDepto.getText().length() == 0 || txtStatus.getText().length() == 0) {
-                JOptionPane.showMessageDialog(null, "No están llenos los campos", "ADVERTENCIA", JOptionPane.PLAIN_MESSAGE);
-            } else {
-                PreparedStatement pst = cn.prepareStatement("insert into empleado values(?,?,?,?)");
-                pst.setString(1, txtCod.getText().trim());
-                pst.setString(2, txtNom.getText().trim());
-                pst.setString(3, txtDepto.getText().trim());
-                pst.setString(4, txtStatus.getText().trim());
-                pst.executeUpdate();
-                MostrarDatos();
-                txtCod.setText("");
-                txtNom.setText("");
-                txtDepto.setText("");
-                txtStatus.setText("");
-                JOptionPane.showMessageDialog(null, "REGISTRO GUARDADO", " ", JOptionPane.PLAIN_MESSAGE);
+        if (evt.getSource().equals(btnGrabar)) {
+            try {
+                if (txtCod.getText().length() == 0 || txtNom.getText().length() == 0 || txtDepto.getText().length() == 0 || txtStatus.getText().length() == 0) {
+                    JOptionPane.showMessageDialog(null, "No están llenos los campos", "ADVERTENCIA", JOptionPane.PLAIN_MESSAGE);
+                } else {
+                    PreparedStatement pst = cn.prepareStatement("insert into empleado values(?,?,?,?,?,?)");
+                    pst.setString(1, txtCod.getText().trim());
+                    pst.setString(2, txtNom.getText().trim());
+                    pst.setString(3, txtSueldo.getText().trim());
+                    pst.setString(4, txtPuesto.getText().trim());
+                    pst.setString(5, txtDepto.getText().trim());
+                    pst.setString(6, txtStatus.getText().trim());
+                    pst.executeUpdate();
+                    MostrarDatos("");
+                    LimpiarTexts();
+                    InhabilitarBotones();
+                    JOptionPane.showMessageDialog(null, "REGISTRO GUARDADO", " ", JOptionPane.PLAIN_MESSAGE);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Fallo: " + e, "ERROR", JOptionPane.PLAIN_MESSAGE);
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Fallo: " + e, "ERROR", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_btnGrabarActionPerformed
 
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        if (evt.getSource().equals(btnModificar)) {
+            String sSQL="UPDATE empleado SET empnombre='"+txtNom.getText().trim()+"',empsueldo='"+txtSueldo.getText().trim()+"',codpuesto='"+txtPuesto.getText().trim()+"',depcodigo='"+txtDepto.getText().trim()+"',empstatus='"+txtStatus.getText().trim()+"' WHERE empcodigo='"+txtCod.getText().trim()+"'";
+            try {
+                PreparedStatement pst = cn.prepareStatement(sSQL);
+                pst.executeUpdate();
+                MostrarDatos("");
+                InhabilitarBotones();
+                LimpiarTexts();
+                btnGrabar.setEnabled(true);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarActionPerformed
+        if (evt.getSource().equals(btnMostrar)) {
+            MostrarDatos("");
+        }
+    }//GEN-LAST:event_btnMostrarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        if (evt.getSource().equals(btnBuscar)) {
+            MostrarDatos(txtBuscar.getText().trim());
+            txtBuscar.setText("");
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void jMiModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMiModificarActionPerformed
+        int fila = tblEmpleados.getSelectedRow();
+        if (fila >= 0) {
+            txtCod.setText(tblEmpleados.getValueAt(fila, 0).toString());
+            txtNom.setText(tblEmpleados.getValueAt(fila, 1).toString());
+            txtSueldo.setText(tblEmpleados.getValueAt(fila, 2).toString());
+            txtPuesto.setText(tblEmpleados.getValueAt(fila, 3).toString());
+            txtDepto.setText(tblEmpleados.getValueAt(fila, 4).toString());
+            txtStatus.setText(tblEmpleados.getValueAt(fila, 5).toString());
+            btnModificar.setEnabled(true);
+            btnGrabar.setEnabled(false);
+        } else {
+            JOptionPane.showMessageDialog(null, "No selecciono fila", "ADVERTENCIA", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_jMiModificarActionPerformed
+
+    private void jMiEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMiEliminarActionPerformed
+        int fila = tblEmpleados.getSelectedRow();
+        String sCod = "";
+        sCod = tblEmpleados.getValueAt(fila, 0).toString();
+        try {
+            PreparedStatement pst = cn.prepareStatement("DELETE FROM empleado WHERE empcodigo='" + sCod + "'");
+            pst.executeUpdate();
+            MostrarDatos("");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_jMiEliminarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnGrabar;
     private javax.swing.JButton btnModificar;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnMostrar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JMenuItem jMiEliminar;
+    private javax.swing.JMenuItem jMiModificar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPopupMenu jPnModEliminar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblEmpleados;
     private javax.swing.JTextField txtBuscar;
     private javax.swing.JTextField txtCod;
     private javax.swing.JTextField txtDepto;
     private javax.swing.JTextField txtNom;
+    private javax.swing.JTextField txtPuesto;
     private javax.swing.JTextField txtStatus;
+    private javax.swing.JTextField txtSueldo;
     // End of variables declaration//GEN-END:variables
 }

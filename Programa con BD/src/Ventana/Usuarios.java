@@ -120,8 +120,8 @@ public class Usuarios extends javax.swing.JFrame {
         try {
             String sUsuario=txtUserName.getText().trim();
             String sContra=txtPassword.getText().trim();
-            PreparedStatement pst = cn.prepareStatement("select count(CodUsuario) as i from usuarios where NomUsuario='"+sUsuario+"'"+
-                    "and PassUsuario='"+sContra+"'");
+            PreparedStatement pst = cn.prepareStatement("select count(codusuario) as i from usuario where nomusuario='"+sUsuario+"'"+
+                    "and claveusuario='"+sContra+"'");
             ResultSet rs=pst.executeQuery();
             while(rs.next()){
                 if(rs.getString("i").equals("1")){
