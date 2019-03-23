@@ -7,10 +7,10 @@ import Ventana.*;
 
 public class Control_Planilla {
 
-    static Menu m = new Menu();
+    static Usuarios u = new Usuarios();
 
     public static void main(String[] args) {
-        m.setVisible(true);
+        u.setVisible(true);
         
     }
 }

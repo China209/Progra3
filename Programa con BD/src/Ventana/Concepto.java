@@ -1,7 +1,6 @@
-
 package Ventana;
 
-import Clase.Conexion;
+import Clase.*;
 import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.*;
@@ -10,13 +9,15 @@ public class Concepto extends javax.swing.JFrame {
 
     Conexion c = new Conexion();
     Connection cn = c.SQLConnection();
+
     public Concepto() {
         initComponents();
         MostrarDatos("");
+        GenerarCodigo();
         this.setLocationRelativeTo(null);
     }
 
-     void InhabilitarBotones() {
+    void InhabilitarBotones() {
         btnModificar.setEnabled(false);
     }
 
@@ -25,6 +26,7 @@ public class Concepto extends javax.swing.JFrame {
         txtNom.setText("");
         txtEfecto.setText("");
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -82,6 +84,7 @@ public class Concepto extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Datos Concepto", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Malgun Gothic", 1, 14))); // NOI18N
 
         txtCod.setFont(new java.awt.Font("Malgun Gothic", 0, 12)); // NOI18N
+        txtCod.setEnabled(false);
 
         txtNom.setFont(new java.awt.Font("Malgun Gothic", 0, 12)); // NOI18N
 
@@ -247,6 +250,35 @@ public class Concepto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    void GenerarCodigo() {
+        int j;
+        String sNum = "";
+        String sC = "";
+        String sSQL = "select max(codConcepto) from concepto";
+        try {
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sSQL);
+            if (rs.next()) {
+                sC = rs.getString(1);
+            }
+            if (sC == null) {
+                txtCod.setText("CO0001");
+            } else {
+                char cR1 = sC.charAt(2);
+                char cR2 = sC.charAt(3);
+                char cR3 = sC.charAt(4);
+                char cR4 = sC.charAt(5);
+                String sRT = "" + cR1 + cR2 + cR3 + cR4;
+                j = Integer.parseInt(sRT);
+                Generador_Codigo cg = new Generador_Codigo();
+                cg.Generar(j);
+                txtCod.setText("CO" + cg.Serie());
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     void MostrarDatos(String sCadena) {
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("Código");
@@ -289,6 +321,7 @@ public class Concepto extends javax.swing.JFrame {
                     LimpiarTexts();
                     JOptionPane.showMessageDialog(null, "REGISTRO GUARDADO", " ", JOptionPane.PLAIN_MESSAGE);
                     InhabilitarBotones();
+                    GenerarCodigo();
                 }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Fallo: " + e, "ERROR", JOptionPane.PLAIN_MESSAGE);
@@ -312,13 +345,14 @@ public class Concepto extends javax.swing.JFrame {
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         if (evt.getSource().equals(btnModificar)) {
             try {
-                String sSQL="UPDATE concepto SET nomConcepto='" + txtNom.getText().trim() + "',efecto_concepto='"+txtEfecto.getText().trim()+"' WHERE codConcepto='" + txtCod.getText().trim() + "'";
+                String sSQL = "UPDATE concepto SET nomConcepto='" + txtNom.getText().trim() + "',efecto_concepto='" + txtEfecto.getText().trim() + "' WHERE codConcepto='" + txtCod.getText().trim() + "'";
                 PreparedStatement pst = cn.prepareStatement(sSQL);
                 pst.executeUpdate();
                 MostrarDatos("");
                 InhabilitarBotones();
                 LimpiarTexts();
                 btnGuardar.setEnabled(true);
+                GenerarCodigo();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -339,11 +373,11 @@ public class Concepto extends javax.swing.JFrame {
     }//GEN-LAST:event_jMiModificarActionPerformed
 
     private void jMiEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMiEliminarActionPerformed
-        int fila=tblConcepto.getSelectedRow();
-        String sCod="";
-        sCod=tblConcepto.getValueAt(fila, 0).toString();
+        int fila = tblConcepto.getSelectedRow();
+        String sCod = "";
+        sCod = tblConcepto.getValueAt(fila, 0).toString();
         try {
-            PreparedStatement pst=cn.prepareStatement("DELETE FROM concepto WHERE codConcepto='"+sCod+"'");
+            PreparedStatement pst = cn.prepareStatement("DELETE FROM concepto WHERE codConcepto='" + sCod + "'");
             pst.executeUpdate();
             MostrarDatos("");
         } catch (Exception e) {

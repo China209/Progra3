@@ -11,6 +11,7 @@ public class ManejoUsuario extends javax.swing.JFrame {
 
     public ManejoUsuario() {
         initComponents();
+        cbmTipo.setSelectedIndex(0);
         this.setLocationRelativeTo(null);
         btnModificar1.setEnabled(false);
         btnEliminar.setEnabled(false);
@@ -37,6 +38,8 @@ public class ManejoUsuario extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         txtCod = new javax.swing.JTextField();
         txtEstatus = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        cbmTipo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -48,7 +51,7 @@ public class ManejoUsuario extends javax.swing.JFrame {
         jPanel1.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 230, 187, 30));
 
         jLabel2.setText("ESTATUS");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 320, -1, 20));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 360, -1, 20));
 
         btnGuardar.setBackground(new java.awt.Color(0, 102, 102));
         btnGuardar.setFont(new java.awt.Font("Malgun Gothic", 0, 14)); // NOI18N
@@ -61,7 +64,7 @@ public class ManejoUsuario extends javax.swing.JFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 370, -1, -1));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 410, -1, -1));
 
         btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cancelar (1).png"))); // NOI18N
         btnSalir.setBorder(null);
@@ -94,7 +97,7 @@ public class ManejoUsuario extends javax.swing.JFrame {
                 btnEliminarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 370, -1, -1));
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 410, -1, -1));
 
         btnBuscar.setBackground(new java.awt.Color(0, 102, 102));
         btnBuscar.setFont(new java.awt.Font("Malgun Gothic", 0, 14)); // NOI18N
@@ -126,7 +129,7 @@ public class ManejoUsuario extends javax.swing.JFrame {
                 btnModificar1ActionPerformed(evt);
             }
         });
-        jPanel1.add(btnModificar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 370, -1, -1));
+        jPanel1.add(btnModificar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 410, -1, -1));
 
         jLabel5.setText("CONTRASEÑA");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 230, -1, 20));
@@ -138,9 +141,16 @@ public class ManejoUsuario extends javax.swing.JFrame {
         jPanel1.add(txtCod, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 187, 30));
 
         txtEstatus.setFont(new java.awt.Font("Malgun Gothic", 0, 14)); // NOI18N
-        jPanel1.add(txtEstatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 310, 187, 30));
+        jPanel1.add(txtEstatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 350, 187, 30));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 420));
+        jLabel7.setText("TIPO");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 300, -1, 20));
+
+        cbmTipo.setFont(new java.awt.Font("Malgun Gothic", 0, 12)); // NOI18N
+        cbmTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "----Seleccione Tipo----", "Invitado", "Administrador" }));
+        jPanel1.add(cbmTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 300, 190, 30));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 450));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -149,18 +159,20 @@ public class ManejoUsuario extends javax.swing.JFrame {
         if (evt.getSource().equals(btnGuardar)) {
             //Permite guardar el nombre de Usuario y Contraseña
             try {
-                if (txtUserName.getText().length() == 0 || txtPassword.getText().length() == 0) {
-                    JOptionPane.showMessageDialog(null, "Usuario y/o Contraseña vacíos", "ADVERTENCIA", JOptionPane.PLAIN_MESSAGE);
+                if (txtCod.getText().length() == 0 || txtUserName.getText().length() == 0 || txtPassword.getText().length() == 0 || cbmTipo.getSelectedIndex() == 0 || txtEstatus.getText().length() == 0) {
+                    JOptionPane.showMessageDialog(null, "Campos Vacíos", "ADVERTENCIA", JOptionPane.PLAIN_MESSAGE);
                 } else {
-                    PreparedStatement pst = cn.prepareStatement("insert into usuario values(?,?,?,?)");
+                    PreparedStatement pst = cn.prepareStatement("insert into usuario values(?,?,?,?,?)");
                     pst.setString(1, txtCod.getText().trim());
                     pst.setString(2, txtUserName.getText().trim());
                     pst.setString(3, txtPassword.getText().trim());
-                    pst.setString(4, txtEstatus.getText().trim());
+                    pst.setString(4, cbmTipo.getSelectedItem().toString().trim());
+                    pst.setString(5, txtEstatus.getText().trim());
                     pst.executeUpdate();
                     txtCod.setText("");
                     txtUserName.setText("");
                     txtPassword.setText("");
+                    cbmTipo.setSelectedIndex(0);
                     txtEstatus.setText("");
                     JOptionPane.showMessageDialog(null, "REGISTRO GUARDADO", " ", JOptionPane.PLAIN_MESSAGE);
                 }
@@ -192,6 +204,7 @@ public class ManejoUsuario extends javax.swing.JFrame {
                         txtCod.setText(rs.getString("codusuario"));
                         txtUserName.setText(rs.getString("nomusuario"));
                         txtPassword.setText(rs.getString("claveusuario"));
+                        cbmTipo.setSelectedItem(rs.getString("tipousuario"));
                         txtEstatus.setText(rs.getString("estatus_usuario"));
                         btnGuardar.setEnabled(false);
                         btnModificar1.setEnabled(true);
@@ -219,6 +232,7 @@ public class ManejoUsuario extends javax.swing.JFrame {
                 txtCod.setText("");
                 txtUserName.setText("");
                 txtPassword.setText("");
+                cbmTipo.setSelectedIndex(0);
                 txtEstatus.setText("");
                 txtBuscar.setText("");
                 JOptionPane.showMessageDialog(null, "Usuario Eliminado", "REGISTRO DATOS", JOptionPane.PLAIN_MESSAGE);
@@ -235,15 +249,17 @@ public class ManejoUsuario extends javax.swing.JFrame {
         if (evt.getSource().equals(btnModificar1)) {
             try {
                 String cod = txtBuscar.getText().trim();
-                PreparedStatement pst = cn.prepareStatement("update usuario set nomusuario = ?, claveusuario = ?, estatus_usuario=? where codusuario = " + cod);
+                PreparedStatement pst = cn.prepareStatement("update usuario set nomusuario = ?, claveusuario = ?, tipousuario=? ,estatus_usuario=? where codusuario = " + cod);
                 pst.setString(1, txtUserName.getText().trim());
                 pst.setString(2, txtPassword.getText().trim());
-                pst.setString(3, txtEstatus.getText().trim());
+                pst.setString(3, cbmTipo.getSelectedItem().toString().trim());
+                pst.setString(4, txtEstatus.getText().trim());
                 pst.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Dato Modificado", "REGISTRO DATOS", JOptionPane.PLAIN_MESSAGE);
                 txtCod.setText("");
                 txtUserName.setText("");
                 txtPassword.setText("");
+                cbmTipo.setSelectedIndex(0);
                 txtEstatus.setText("");
                 txtBuscar.setText("");
                 btnGuardar.setEnabled(true);
@@ -263,12 +279,14 @@ public class ManejoUsuario extends javax.swing.JFrame {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnModificar1;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JComboBox<String> cbmTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField txtBuscar;
     private javax.swing.JTextField txtCod;

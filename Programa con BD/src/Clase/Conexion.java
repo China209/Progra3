@@ -5,7 +5,7 @@ import java.sql.*;
 import javax.swing.JOptionPane;
 
 public class Conexion {
-    Connection conectar=null;
+    private Connection conectar=null;
     public Connection SQLConnection(){
         try{
             Class.forName("com.mysql.jdbc.Driver");

@@ -3,11 +3,15 @@ package Ventana;
 import Clase.Conexion;
 import Clase.Llenado_Planilla;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+
 public class Usuarios extends javax.swing.JFrame {
 
-    Conexion c=new Conexion();
-    Connection cn=c.SQLConnection();
+    Conexion c = new Conexion();
+    Connection cn = c.SQLConnection();
+
     public Usuarios() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -34,6 +38,7 @@ public class Usuarios extends javax.swing.JFrame {
         jLabel2.setText("CONTRASEÑA");
 
         btnIngreso.setText("Ingresar");
+        btnIngreso.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnIngreso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIngresoActionPerformed(evt);
@@ -77,22 +82,22 @@ public class Usuarios extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     static Llenado_Planilla lp = new Llenado_Planilla();
+    static Menu m = new Menu();
 
     public static void Corrida() {
         int iOpcion;//Variable de Opcion de Menú
-        int iDeptos[] = new int[5];//Vector de Departamentos
-        String[][] sPlanilla = new String[10][10];//Matriz donde se guardará la planilla
+        String[][] sPlanilla = new String[5][10];//Matriz donde se guardará la planilla
         do {//Ciclo que se genera si la opcion no sea igual a 0
             iOpcion = Integer.parseInt(JOptionPane.showInputDialog(null, "1.Ingreso de Datos\n0.Salir", "MENÚ", JOptionPane.PLAIN_MESSAGE));
-            menu(iOpcion, sPlanilla, iDeptos);
+            menu(iOpcion, sPlanilla);
         } while (iOpcion != 0);
         System.exit(0);//Termina en programa
     }
 
-    private static void menu(int iOpcion, String[][] sPlanilla, int[] iDeptos) {
+    private static void menu(int iOpcion, String[][] sPlanilla) {
         switch (iOpcion) {
             case 1:
-                lp.Llenado_General(sPlanilla, iDeptos);//Llama el procedimiento de la clase Llenado Planilla
+                lp.Llenado(sPlanilla);//Llama el procedimiento de la clase Llenado Planilla
                 System.out.print("CÓDIGO\t\t" + "NOMBRE\t\t" + "SUELDO BASE\t" + "BONO\t\t" + "COMISION\t" + "IGSS\t" + "DESCUENTO "
                         + "JUDICIAL\t" + "ISR\t" + "SUELDO LIQUIDO\t\t" + "DEPTO." + "\n");
 
@@ -101,11 +106,6 @@ public class Usuarios extends javax.swing.JFrame {
                         System.out.print(sPlanilla[i][j] + "\t" + "\t");
                     }
                     System.out.print("\t" + "\n");
-                }
-                System.out.print("TOTAL POR DEPARTAMENTOS\n");
-                System.out.print("1\t\t" + "2\t\t" + "3\t\t" + "4\t\t" + "5\t\t\n");
-                for (int j = 0; j < 5; j++) {//Imprime el vector de departamentos
-                    System.out.print(iDeptos[j] + "\t" + "\t");
                 }
                 System.out.println();
                 System.out.println();
@@ -116,25 +116,37 @@ public class Usuarios extends javax.swing.JFrame {
                 break;
         }
     }
+    private int iResult = 0;
     private void btnIngresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresoActionPerformed
         try {
-            String sUsuario=txtUserName.getText().trim();
-            String sContra=txtPassword.getText().trim();
-            PreparedStatement pst = cn.prepareStatement("select count(codusuario) as i from usuario where nomusuario='"+sUsuario+"'"+
-                    "and claveusuario='"+sContra+"'");
-            ResultSet rs=pst.executeQuery();
-            while(rs.next()){
-                if(rs.getString("i").equals("1")){
-                    this.setVisible(false);
-                    Corrida();
-                }else{
-                    JOptionPane.showMessageDialog(null, "No existe ese Usuario y/o Contraseña", "ERROR LOGIN", JOptionPane.PLAIN_MESSAGE);
-                }
-                        
+            String sTipo="";
+            String sUsuario = txtUserName.getText().trim();
+            String sContra = txtPassword.getText().trim();
+            String sSQL = "SELECT * FROM usuario WHERE nomusuario='" + sUsuario + "'"
+                    + "and claveusuario='" + sContra + "'";
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sSQL);
+            while (rs.next()) {
+               sTipo =rs.getString("tipousuario");
+                System.out.println(sTipo);
+            }
+            if(sTipo.equalsIgnoreCase("Administrador")){
+                JOptionPane.showMessageDialog(null, "Bienvenid@ "+sUsuario,"",JOptionPane.PLAIN_MESSAGE);
+                Menu m=new Menu();
+                m.setVisible(true);
+                this.dispose();
+            }
+            if(sTipo.equalsIgnoreCase("Invitado")){
+                JOptionPane.showMessageDialog(null, "Bienvenid@ ","",JOptionPane.PLAIN_MESSAGE);
+                Corrida();
+                this.setVisible(false);
+            }
+            if(!sTipo.equalsIgnoreCase("Administrador")&&!sTipo.equalsIgnoreCase("Invitado")){
+                JOptionPane.showMessageDialog(null, "No existe Usuario ","",JOptionPane.PLAIN_MESSAGE);
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,"Error: "+e,"ERROR",JOptionPane.PLAIN_MESSAGE);
+           System.out.println("Error: " +e+" "+ e.getMessage());
         }
     }//GEN-LAST:event_btnIngresoActionPerformed
 

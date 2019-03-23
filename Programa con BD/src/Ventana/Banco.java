@@ -1,6 +1,6 @@
 package Ventana;
 
-import Clase.Conexion;
+import Clase.*;
 import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.*;
@@ -13,6 +13,7 @@ public class Banco extends javax.swing.JFrame {
     public Banco() {
         initComponents();
         MostrarDatos("");
+        GenerarCodigo();
         this.setLocationRelativeTo(null);
     }
 
@@ -26,6 +27,34 @@ public class Banco extends javax.swing.JFrame {
         txtCuenta.setText("");
     }
 
+    void GenerarCodigo(){
+        int j;
+        String sNum="";
+        String sC="";
+        String sSQL="select max(codigoBanco) from banco";
+        try{
+            Statement st=cn.createStatement();
+            ResultSet rs=st.executeQuery(sSQL);
+            if(rs.next()){
+                sC=rs.getString(1);
+            }
+            if(sC==null){
+                txtCod.setText("BA0001");
+            }else{
+                char cR1=sC.charAt(2);
+                char cR2=sC.charAt(3);
+                char cR3=sC.charAt(4);
+                char cR4=sC.charAt(5);
+                String sRT=""+cR1+cR2+cR3+cR4;
+                j=Integer.parseInt(sRT);
+                Generador_Codigo cg=new Generador_Codigo();
+                cg.Generar(j);
+                txtCod.setText("BA"+cg.Serie());
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -75,6 +104,7 @@ public class Banco extends javax.swing.JFrame {
         jLabel1.setText("Código");
 
         txtCod.setFont(new java.awt.Font("Malgun Gothic", 0, 12)); // NOI18N
+        txtCod.setEnabled(false);
 
         jLabel2.setFont(new java.awt.Font("Malgun Gothic", 0, 12)); // NOI18N
         jLabel2.setText("Nombre");
@@ -288,6 +318,7 @@ public class Banco extends javax.swing.JFrame {
                     LimpiarTexts();
                     JOptionPane.showMessageDialog(null, "REGISTRO GUARDADO", " ", JOptionPane.PLAIN_MESSAGE);
                     InhabilitarBotones();
+                    GenerarCodigo();
                 }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Fallo: " + e, "ERROR", JOptionPane.PLAIN_MESSAGE);
@@ -318,6 +349,7 @@ public class Banco extends javax.swing.JFrame {
                 InhabilitarBotones();
                 LimpiarTexts();
                 btnGuardar.setEnabled(true);
+                GenerarCodigo();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
