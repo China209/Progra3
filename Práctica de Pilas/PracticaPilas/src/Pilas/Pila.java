@@ -6,6 +6,7 @@ public class Pila {
     private int longitud = 0;
 
     private class Nodo {
+
         //Creación del nodo
         public Libro libro;
         public Nodo siguiente = null;
@@ -14,6 +15,7 @@ public class Pila {
             this.libro = libro;
         }
     }
+
     //Inserción del elemento
     public void Push(Libro libro) {
         Nodo nodo = new Nodo(libro);
@@ -21,16 +23,18 @@ public class Pila {
         cabeza = nodo;
         longitud++;
     }
+
     //Elimina la Pila
     public void VaciarPila() {
         if (cabeza != null) {
-            Nodo primer=cabeza;
-            cabeza=cabeza.siguiente=null;
-            primer.siguiente=null;
-            cabeza=cabeza;
+            Nodo primer = cabeza;
+            cabeza = cabeza.siguiente = null;
+            primer.siguiente = null;
+            cabeza = cabeza;
             longitud--;
         }
     }
+
     //Elimina el elemento del inicio, desapila
     public void Pop() {
         if (cabeza != null) {
@@ -40,10 +44,12 @@ public class Pila {
             longitud--;
         }
     }
+
     //Retorna el valor de la longitud de la pila
     public int Tamaño() {
         return longitud;
     }
+
     //Verifica si la pila está vacía o no
     public boolean Vacio() {
         return longitud == 0;
@@ -56,16 +62,23 @@ public class Pila {
             return cabeza.libro;
         }
     }
+
     //Muestra el contenido de los datos ingresados
-    public String MostrarDatos() {
+    public String MostrarDatos() throws PilaVaciaException {
         String Dato = " ";
         Nodo aux = cabeza;
-        while (aux != null) {
-            Dato += "\nAutor: " + aux.libro.getAutor() + "\nTítulo: " + aux.libro.getTitulo() + "\nISBN: " + aux.libro.getIsbn() + "\n";
-            aux = aux.siguiente;
+        if (aux == null) {
+            throw new PilaVaciaException("No hay datos para mostrar la pila está vacía\n");
+        } else {
+
+            while (aux != null) {
+                Dato += "\nAutor: " + aux.libro.getAutor() + "\nTítulo: " + aux.libro.getTitulo() + "\nISBN: " + aux.libro.getIsbn() + "\n";
+                aux = aux.siguiente;
+            }
         }
         return (Dato);
     }
+
     //Obtiene el libro ´por posición
     public Libro obtenerLibro(int n) {
         if (cabeza == null) {
