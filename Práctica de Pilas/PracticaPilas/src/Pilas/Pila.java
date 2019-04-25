@@ -78,7 +78,14 @@ public class Pila {
         }
         return (Dato);
     }
-
+    //Devuelve el valor de que se encuentra en la cima de la Pila
+    public Libro Top()throws Exception{
+        if(cabeza==null){
+            throw new Exception("La pila se encuentra vacía");
+        }else{
+            return cabeza.libro;
+        }
+    }
     //Obtiene el libro ´por posición
     public Libro obtenerLibro(int n) {
         if (cabeza == null) {

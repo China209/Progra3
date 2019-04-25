@@ -18,7 +18,7 @@ public class Practica {
             Scanner entrada = new Scanner(System.in);
             do {
                 //Menu
-                System.out.println("MENÚ\n1.Ingreso de Datos\n2.Mostrar Lista de Datos\n3.Eliminar Datos\n4.Lista Vacia\n5.Vaciar Pila\n0.Salir");
+                System.out.println("MENÚ\n1.Ingreso de Datos\n2.Mostrar Lista de Datos\n3.Eliminar Datos\n4.Lista Vacia\n5.Vaciar Pila\n6.Cima\n0.Salir");
                 iOpcion = entrada.nextInt();//Obtiene el valor del dato numérico ingresado
                 switch (iOpcion) {
                     case 1://En caso de Ingreso de Datos
@@ -38,10 +38,15 @@ public class Practica {
                         pila.VaciarPila();
                         System.out.println("Vaciado");
                         break;
+                    case 6:
+                        System.out.println("La cima es: " + pila.Top());
+                        break;
                 }
 
             } while (iOpcion != 0);//Si la opción es = 0, sale del programa
         } catch (PilaVaciaException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         } finally {
             System.out.println("PROGRAMA DE PILAS CON EXCEPCIONES PERSONALIZADAS");
